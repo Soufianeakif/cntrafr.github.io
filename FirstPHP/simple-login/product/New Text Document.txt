@@ -1,0 +1,94 @@
+<tr>
+          <td data-title="Provider Name"><?php echo $output["ID_Produit"];?></td>
+          <td data-title="E-mail"><?php echo $output["Produit_name"];?></td>
+
+          <td class="select">
+            <?php 
+              if ($output["Status"] == 1){
+                $x = "Active";
+            ?>
+                <a class="button" style="background-color: #54a1a0;" href="#">
+            <?php
+              }else{
+                $x = "Deactive";
+            ?>
+                <a class="button" style="background-color: #BD2A4E;" href="#">
+            <?php}
+              echo $x;
+            ?>
+                </a>
+          </td>
+        
+          <td data-title="Prix"><?php echo $output["Prix"];?></td>
+        </tr>
+
+--------------------------------------
+
+<?php
+      $x = "";
+      $c = ""
+      foreach($results as $output) {
+        if ($output["Status"] == 1){
+          $x = "Active";
+          $c = "#54a1a0"
+        }else{
+          $x = "Deactive";
+          $c = "#BD2A4E";
+        }
+        ?>
+        <tr>
+          <td data-title="Provider Name"><?php echo $output["ID_Produit"];?></td>
+          <td data-title="E-mail"><?php echo $output["Produit_name"];?></td>
+
+          <td class="select">
+                <a class="button" style="background-color: <?php echo $c; ?>;" href="#">
+                  <?php echo $x;?>
+                </a>
+          </td>
+        
+          <td data-title="Prix"><?php echo $output["Prix"];?></td>
+        </tr>
+        <?php }?>
+
+
+
+
+
+
+
+
+
+
+
+
+/**************/
+<div class="k-scheduler-cell k-slot-cell k-nonwork-hour" tabindex="-1" aria-label="Monday, May 16, 2022, 12:00 AM–00:30" aria-selected="false" data-slot="true" data-slot-allday="false" data-slot-start="1652655600000" data-slot-end="1652657400000" data-slot-group="0" data-slot-range="0" data-slot-index="0" style="user-select: none; padding: 0px;"></div>
+
+<tr>
+    <td data-title="Provider Name"><?php echo $t;?></td>
+    <td data-title="E-mail" style="background-color: red;"></td>
+    <td class="select"></td>
+    <td data-title="Prix"></td>
+    <td class="select"></td>
+</tr>
+
+
+<!-- <td data-title="E-mail">1</td>
+              <td class="select">2</td>
+              <td data-title="Prix">3</td>
+              <td class="select">4</td> -->
+
+<?php foreach($t as $hour) {?>
+          <tr>
+              <td data-title="Provider Name"><?php echo date("H:i", $hour); ?></td>
+              <?php foreach($results as $output) {  ?>
+                <?php foreach($resultsrent as $orent) {  ?>
+                        
+                  <?php if (in_array($output["ID_Produit"], $orent["ID_Produit"])){ ?>
+                          <td><?php echo $output["ID_Produit"] . " kayna";?></td>
+                  <?php } ?> 
+
+                <?php } ?>           
+              <?php }?>
+          </tr>
+        <?php }?>
