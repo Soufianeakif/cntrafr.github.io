@@ -28,7 +28,7 @@ if(!isset($_SESSION))
         <div class="main_content">
            <a href="logout.php">Logout</a><br><hr>
 	   <h3>Hi <?php echo $_SESSION['full_name']; ?></h3>
-           <h1>Welcome to Single Login Home Page......!</h1>
+           <h1>Welcome ..............................................!</h1>
         </div>
 
         <a href="addproduct.php">add product</a>
