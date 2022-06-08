@@ -9,7 +9,7 @@ $product_id = $_GET["id_product"];
     }
 
 
-    $statement = $db->prepare("select ID_Produit,ID_TypeProduit,Produit_name,Prix,Description,Status,image_file_name FROM produit
+    $statement = $db->prepare("select ID_Produit,ID_TypeProduit,Produit_name,Prix,old_prix,Nom,Description,Status,image_file_name,climatisation,place FROM produit
                                 INNER JOIN type_produit
                                 ON produit.ID_TypeProduit = type_produit.ID
                                 where Status=1 and ID_Produit = ?
@@ -17,10 +17,14 @@ $product_id = $_GET["id_product"];
             $statement->execute(array($product_id));
     $results = $statement->fetchAll();
 
-            $var1 = $results[0]['Description'];           
-            $var2 = $results[0]['Prix'];
+            $Descri = $results[0]['Description'];           
+            $nprix = $results[0]['Prix'];
             $var3 = $results[0]['Produit_name'];
             $var4 = $results[0]['image_file_name'];
+            $clim = $results[0]['climatisation'];
+            $n_place = $results[0]['place'];
+            $nom = $results[0]['Nom'];
+            $oprix = $results[0]['old_prix'];
             $Status = $results[0]['Status'];
             if($Status == 0 or $product_id == ''){
                 header('location: 404.html');
@@ -116,13 +120,13 @@ $product_id = $_GET["id_product"];
                 <nav>
                     <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
                         <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">Shop</a></li>
-                        <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="#">About</a></li>
+                        <li><a class="inline-block no-underline hover:text-black hover:underline py-2 px-4" href="about.php">About</a></li>
                     </ul>
                 </nav>
             </div>
 
             <div class="order-1 md:order-2">
-                <a class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl " href="#">
+                <a class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl " href="products.php">
                     <!-- <svg class="fill-current text-gray-800 mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> -->
                         <path d="M5,22h14c1.103,0,2-0.897,2-2V9c0-0.553-0.447-1-1-1h-3V7c0-2.757-2.243-5-5-5S7,4.243,7,7v1H4C3.447,8,3,8.447,3,9v11 C3,21.103,3.897,22,5,22z M9,7c0-1.654,1.346-3,3-3s3,1.346,3,3v1H9V7z M5,10h2v2h2v-2h6v2h2v-2h2l0.002,10H5V10z" />
                     </svg>
@@ -175,32 +179,98 @@ Alternatively if you want to just have a single hero
 <!-- start -->
 
 <section class="bg-white py-8">
-    <main class="flex flex-col xl:flex-row h-screen">
+    <main class="flex flex-col xl:flex-row ">
     <div class="w-full xl:w-1/2 my-4 flex justify-center">
         <div class="w-4/6">
         <h1 class="tracking-tight font-light text-gray-500 text-4xl "><?php echo $var3; ?></h3>
         <hr>
-            <h1 class="text-6xl md:text-8xl tracking-tight leading-none font-extrabold text-cyan-500"><?php echo $var1; ?></h1>
-            <h3 class="text-6xl md:text-2xl tracking-tight leading-none text-cyan-500"><b>Climatisation :</b> Oui</h3>
-            <p class="text-lg text-gray-500 mt-2">Members of an intergalactic alliance paving the way for
-            peace and benevolence among all species. They
-            are known for their enthusiasm for science, for their love of fun, and their dedication to education.</p>
-            <p class="text-lg text-gray-500 mt-2"><b><?php echo $var2; ?> MAD <strike class="text-red-400">300 MAD</strike></b></p>
+            <h1 class="text-6xl md:text-8xl tracking-tight leading-none font-extrabold text-cyan-500"><?php echo $nom; ?></h1>
+            <p class="text-lg text-gray-500 mt-2"><?php echo $Descri; ?></p>
+            
+            
+            <p class="text-lg tracking-tight leading-none text-cyan-500 mt-2"><img class="inline-flex h-5 w-5 mr-2 mb-1" src="https://www.svgrepo.com/show/82364/ice-crystal.svg" alt=""><b>Air conditioner :</b> <?php echo $clim;?></p>
+            <p class="text-lg tracking-tight leading-none text-cyan-500 mt-2"><img class="inline-flex h-5 w-5 mr-2 mb-1" src="https://www.svgrepo.com/show/204084/chair-seat.svg" alt=""><b>Seats :</b> <?php echo $n_place;?></p>
+
+            <?php 
+            if($oprix != 0){
+            $reduction = (-100)*(($nprix - $oprix)/ $oprix) ;
+            $reduction = round($reduction, 0);}
+            if($nprix < $oprix){
+                echo '            <p class="text-lg text-gray-500 mt-10"><b>' . $nprix . ' MAD <strike class="text-red-400">' . $oprix . ' MAD</strike>    ' . $reduction . '% de reduction</b></p>';
+            }else{
+                echo '            <p class="text-lg text-gray-500 mt-10"><b>' .  $nprix .  ' MAD </b></p>';
+                
+
+
+            }
+            
+            ?>
+            <!-- <p class="text-lg text-gray-500 mt-10"><b><?php echo $nprix; ?> MAD <strike class="text-red-400"><?php echo $oprix;?> MAD</strike></b></p> -->
+
+
             <!-- <a href="#" class="inline-block bg-cyan-500 hover:bg-pink-600 mt-3 px-6 py-3 rounded-md text-white">Learn More</a> -->
             <button class=" inline-block bg-transparent hover:bg-gray-500 text-Slate-700 font-semibold hover:text-white mt-3 px-6 py-3 border border-Slate-700 hover:border-transparent rounded">
             Reserve now
             </button>
         </div>
     </div>
-    <div class="w-full xl:w-1/2 h-screen mr-5">
+
+    
+
+
+
+
+
+    <div class="w-full xl:w-1/2 mr-5">
         <img class="object-contain h-594 w-371" src="./uploads/<?php echo $var4; ?>" alt="Robot Group">
+        
     </div>
     </main>
     </div>
 </section>
 
 <!-- end -->
+    <div class="xl:w-2/2" align=center >
+    <hr width="80%">
+    </div>
+    <section class="bg-white mt-6 mb-3">
+            <h1 class="tracking-tight font-light text-gray-900 text-4xl " align=center><img class="inline-flex h-8 w-8 mr-2 mb-2" src="https://www.svgrepo.com/show/263992/fire.svg" alt=""><b> Trending products </b></h3>
+    
+    </section>
 
+<section class="bg-gray-100 py-0">
+<div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+        
+<?php 
+$statement1 = $db->prepare("select rent.ID_Produit,ID_TypeProduit,Produit_name,Prix,Description,Status,image_file_name,SUM(D_End - D_Start) AS 'somme' FROM rent INNER JOIN produit ON rent.ID_Produit = produit.ID_Produit INNER JOIN type_produit ON produit.ID_TypeProduit = type_produit.ID GROUP BY rent.ID_Produit ORDER BY `somme` DESC LIMIT 4;");
+$statement1->execute();
+$results1 = $statement1->fetchAll();
+
+// $pic1 = $results[0]['image_file_name'];
+
+?>
+
+        <?php 
+            foreach($results1 as $output){
+                echo '<div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+                <a href="product-details.php?id_product=' . $output['ID_Produit'] . '">
+                    <img class="hover:grow hover:shadow-lg " src="uploads/' . $output['image_file_name'] . '">
+                    <div class="pt-3 flex items-center justify-between">
+                        <p class="">' . $output['Produit_name'] . '</p>
+                        <svg class="h-6 w-6 fill-current text-gray-500 hover:text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12,4.595c-1.104-1.006-2.512-1.558-3.996-1.558c-1.578,0-3.072,0.623-4.213,1.758c-2.353,2.363-2.352,6.059,0.002,8.412 l7.332,7.332c0.17,0.299,0.498,0.492,0.875,0.492c0.322,0,0.609-0.163,0.792-0.409l7.415-7.415 c2.354-2.354,2.354-6.049-0.002-8.416c-1.137-1.131-2.631-1.754-4.209-1.754C14.513,3.037,13.104,3.589,12,4.595z M18.791,6.205 c1.563,1.571,1.564,4.025,0.002,5.588L12,18.586l-6.793-6.793C3.645,10.23,3.646,7.776,5.205,6.209 c0.76-0.756,1.754-1.172,2.799-1.172s2.035,0.416,2.789,1.17l0.5,0.5c0.391,0.391,1.023,0.391,1.414,0l0.5-0.5 C14.719,4.698,17.281,4.702,18.791,6.205z" />
+                        </svg>
+                    </div>
+                    <p class="pt-1 text-gray-900"><b>' . $output['Prix'] . ' MAD</b></p>
+                </a>
+            </div>';
+            }
+
+        ?>
+        
+</div>
+
+    </section>
 
 
 
@@ -249,7 +319,7 @@ Alternatively if you want to just have a single hero
                     <div class="px-3 md:px-0">
                         <h3 class="font-bold text-gray-900">About</h3>
                         <p class="py-4">
-                        Un centre d’affaires est un immeuble de bureaux qui est tout équipé et meublé pour recevoir à bref préavis des utilisateurs de bureaux pour une période généralement limitée.
+                        A serviced office is an office or office building that is fully equipped and managed by a facility management company, also known as an office provider, which then rents individual offices or floors to other companies.
                         </p>
                     </div>
                 </div>
